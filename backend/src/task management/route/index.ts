@@ -2,7 +2,6 @@ import express, { Request, Response, NextFunction } from 'express';
 
 const router = express.Router();
 
-// Example task routes
 // GET /tasks - Get all tasks
 router.get('/', (req: Request, res: Response, next: NextFunction) => {
   try {

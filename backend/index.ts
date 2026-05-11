@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
-import taskRoutes from './src/task management/route/index.ts';
+import taskRoutes from './src/task management/route/index';
 
 const app = express();
 const port: number = 3000;
