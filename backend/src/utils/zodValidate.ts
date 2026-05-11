@@ -1,0 +1,24 @@
+import { ZodType } from "zod";
+import { Request, Response, NextFunction } from "express";
+
+export const validateBody = (schema: ZodType) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const result = schema.safeParse(req.body);
+
+    if (!result.success) {
+      return res.status(400).json({
+        error: 'Validation failed',
+        details: result.error.issues.map(
+          (err) => ({
+            field: err.path.join("."),
+            message: err.message,
+          })
+        ),
+      });
+    }
+    req.body = result.data; 
+    next(); 
+  };
+};
+
+

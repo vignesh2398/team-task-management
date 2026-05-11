@@ -1,12 +1,15 @@
 import express, { Request, Response, NextFunction } from 'express';
+import { z } from 'zod';
+import { getAllTasks, getTaskById, createTask, updateTask, deleteTask } from '../controller/task.controller';
+import { validateBody } from '../../utils/zodValidate';
+import { requireDeleteHeader } from '../../utils/headerValidation';
 
 const router = express.Router();
 
-// GET /tasks - Get all tasks
-router.get('/', (req: Request, res: Response, next: NextFunction) => {
+router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    // TODO: Implement get all tasks logic
-    res.json({ message: 'Get all tasks' });
+    const tasks =  getAllTasks();
+    res.json({ tasks });
   } catch (err) {
     next(err);
   }
@@ -16,40 +19,50 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
 router.get('/:id', (req: Request, res: Response, next: NextFunction) => {
   try {
     const taskId: string = req.params.id as string;
-    // TODO: Implement get task by id logic
-    res.json({ message: `Get task ${taskId}` });
+    const task = getTaskById(taskId);
+    res.json({ task });
   } catch (err) {
     next(err);
   }
 });
 
 // POST /tasks - Create a new task
-router.post('/', (req: Request, res: Response, next: NextFunction) => {
+router.post('/', validateBody(z.object({
+  title: z.string(),
+  description: z.string(),
+  priority: z.enum(["low", "medium", "high"]),
+  status: z.enum(["todo", "in-progress", "done"])
+})), (req: Request, res: Response, next: NextFunction) => {
   try {
-    // TODO: Implement create task logic
-    res.json({ message: 'Create new task' });
+    const newTask = createTask(req.body);
+    res.status(201).json({ task: newTask });
   } catch (err) {
     next(err);
   }
 });
 
 // PUT /tasks/:id - Update a task
-router.put('/:id', (req: Request, res: Response, next: NextFunction) => {
+router.put('/:id',validateBody(z.object({
+  title: z.string(),
+  description: z.string(),
+  priority: z.enum(["low", "medium", "high"]),
+  status: z.enum(["todo", "in-progress", "done"])
+})), (req: Request, res: Response, next: NextFunction) => {
   try {
     const taskId: string = req.params.id as string;
-    // TODO: Implement update task logic
-    res.json({ message: `Update task ${taskId}` });
+    const updatedTask = updateTask(taskId, req.body);
+    res.json({ message: `Update task ${taskId}`, task: updatedTask });
   } catch (err) {
     next(err);
   }
 });
 
 // DELETE /tasks/:id - Delete a task
-router.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
+router.delete('/:id', requireDeleteHeader, (req: Request, res: Response, next: NextFunction) => {
   try {
     const taskId: string = req.params.id as string;
-    // TODO: Implement delete task logic
-    res.json({ message: `Delete task ${taskId}` });
+    deleteTask(taskId);
+     res.status(200).json({ message: `Deleted task ${taskId}` });
   } catch (err) {
     next(err);
   }
