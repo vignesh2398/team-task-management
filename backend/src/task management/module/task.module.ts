@@ -24,6 +24,7 @@ export const updateTasks = (taskId: string, data: Partial<Omit<Task, 'id'>>) => 
         tasks[taskIndex] = { ...tasks[taskIndex], ...data };
         return tasks[taskIndex];
     } catch (error) {
+        if (error instanceof Error) throw error;
         throw new Error("Failed to update task");
     }
 };
@@ -37,6 +38,7 @@ export const deleteTasks = (taskId: string) => {
     const [deletedTask] = tasks.splice(taskIndex, 1);
     return deletedTask;
   } catch (error) {
+    if (error instanceof Error) throw error;
     throw new Error("Failed to delete task");
   }
 };
