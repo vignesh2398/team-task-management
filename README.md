@@ -30,9 +30,12 @@ npm run build
 npm start
 
 Backend Runs on http://localhost:3000
-
+```
 ## 2. Navigate to frontend
 
+```bash
 cd frontend
 npm i
 npm run dev
+frontEnd RUns on  http://localhost:5173
+```
