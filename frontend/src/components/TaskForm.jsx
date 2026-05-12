@@ -1,68 +1,193 @@
 // src/components/TaskForm.jsx
 
-function TaskForm() {
+import { useState } from "react";
+import { createTask } from "../api/taskApi";
+
+function TaskForm({ fetchTasks }) {
+
+  const [description, setDescription] =
+    useState("");
+
+  const [title, setTitle] =
+    useState("");
+
+  const [priority, setPriority] =
+    useState("");
+
+  const [status, setStatus] =
+    useState("");
+
+  const handleAddTask = async (e) => {
+    e.preventDefault();
+
+    try {
+
+      const data = {
+        title,
+        description,
+        priority,
+        status,
+      };
+
+      const response =
+        await createTask(data);
+
+      console.log(
+        "Task created:",
+        response.data
+      );
+
+      // refresh table
+      fetchTasks();
+
+      // clear form
+      setTitle("");
+      setDescription("");
+      setPriority("");
+      setStatus("");
+
+    } catch (error) {
+      console.error(
+        "Error creating task:",
+        error
+      );
+    }
+  };
+
   return (
-    <div>
-      <h2 className="text-xl font-semibold mb-4">
+    <div className="container-fluid">
+
+      <h2 className="fw-bold mb-4">
         Create Task
       </h2>
 
-      <form className="grid gap-4">
-      <div>
-        <label htmlFor="title" className="display:flex
-        ">Task Title</label>
-        <textarea
-          type="text"
-          placeholder="Task title"
-          className="border p-2 rounded"
-        />
+      <form
+        onSubmit={handleAddTask}
+        className="row g-3 align-items-end"
+      >
+
+        {/* Title */}
+        <div className="col-md-3">
+          <label
+            htmlFor="title"
+            className="form-label fw-semibold"
+          >
+            Task Title
+          </label>
+
+          <input
+            id="title"
+            type="text"
+            placeholder="Enter title"
+            value={title}
+            onChange={(e) =>
+              setTitle(e.target.value)
+            }
+            className="form-control"
+          />
         </div>
 
-<div>
+        {/* Description */}
+        <div className="col-md-3">
+          <label
+            htmlFor="description"
+            className="form-label fw-semibold"
+          >
+            Description
+          </label>
 
-    <label htmlFor="description">Description</label>
-        <textarea
-          id="description"
-          placeholder="Description"
-          className="border p-2 rounded"
-        />
-            
-</div>
-
-
-<div>
-    <label htmlFor="priority">Priority</label>
-        <select
-          id="priority"
-          className="border p-2 rounded"
-        >
-          <option value="">Select Priority</option>
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-        </select>
-</div>
-
-<div>
-
-
-    <label htmlFor="status">Status</label>
-        <select
-          id="status"
-          className="border p-2 rounded"
-        >
-          <option value="">Select Status</option>
-          <option value="todo">To Do</option>
-          <option value="in-progress">In Progress</option>
-          <option value="done">Done</option>
-        </select>
+          <input
+            id="description"
+            type="text"
+            placeholder="Enter description"
+            value={description}
+            onChange={(e) =>
+              setDescription(e.target.value)
+            }
+            className="form-control"
+          />
         </div>
 
-        <button
-          className="bg-black text-white p-2 rounded"
-        >
-          Add Task
-        </button>
+        {/* Priority */}
+        <div className="col-md-2">
+          <label
+            htmlFor="priority"
+            className="form-label fw-semibold"
+          >
+            Priority
+          </label>
+
+          <select
+            id="priority"
+            value={priority}
+            onChange={(e) =>
+              setPriority(e.target.value)
+            }
+            className="form-select"
+          >
+            <option value="">
+              Select
+            </option>
+
+            <option value="low">
+              Low
+            </option>
+
+            <option value="medium">
+              Medium
+            </option>
+
+            <option value="high">
+              High
+            </option>
+          </select>
+        </div>
+
+        {/* Status */}
+        <div className="col-md-2">
+          <label
+            htmlFor="status"
+            className="form-label fw-semibold"
+          >
+            Status
+          </label>
+
+          <select
+            id="status"
+            value={status}
+            onChange={(e) =>
+              setStatus(e.target.value)
+            }
+            className="form-select"
+          >
+            <option value="">
+              Select
+            </option>
+
+            <option value="todo">
+              To Do
+            </option>
+
+            <option value="in-progress">
+              In Progress
+            </option>
+
+            <option value="done">
+              Done
+            </option>
+          </select>
+        </div>
+
+        {/* Button */}
+        <div className="col-md-2">
+          <button
+            type="submit"
+            className="btn btn-dark w-100"
+          >
+            Add Task
+          </button>
+        </div>
+
       </form>
     </div>
   );

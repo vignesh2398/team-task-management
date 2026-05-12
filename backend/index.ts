@@ -1,9 +1,11 @@
 import express, { Request, Response, NextFunction } from 'express';
 import taskRoutes from './src/task management/route/index';
+import cors from 'cors';
 
 const app = express();
 const port: number = 3000;
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

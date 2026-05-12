@@ -1,21 +1,26 @@
 // src/store/taskStore.js
 
 import { create } from "zustand";
+import { getTasks } from "../api/taskApi";
 
 const useTaskStore = create((set) => ({
-  tasks: [
-    {
-      id: "1",
-      title: "Build Backend",
-      description:
-        "Create Express APIs",
-      priority: "high",
-      status: "todo",
-    },
-  ],
+  tasks: [],
 
   fetchTasks: async () => {
-    // later connect backend
+    try {
+      const response = await getTasks();
+
+      console.log(response.data);
+
+      set({
+         tasks: response.data.tasks,
+      });
+    } catch (error) {
+      console.error(
+        "Error fetching tasks:",
+        error
+      );
+    }
   },
 }));
 

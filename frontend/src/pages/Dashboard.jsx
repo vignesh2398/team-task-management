@@ -24,7 +24,7 @@ function Dashboard() {
 
   useEffect(() => {
     fetchTasks();
-  }, [fetchTasks]);
+  });
 
   const filteredTasks = useMemo(() => {
     return tasks.filter((task) =>
@@ -45,27 +45,39 @@ function Dashboard() {
           </h1>
         </div>
 
+
+        <div className="card mb-4 d-flex">
+          <div className="card-body">
+            <TaskForm fetchTasks={fetchTasks} />
+          </div>
+        </div>
+
         <div className="card mb-4">
           <div className="card-body">
+
+            <label
+              htmlFor="search"
+              className="form-label fw-bold"
+            >
+              Search Tasks
+            </label>
+
             <SearchBar
+              id="search"
               value={search}
               onChange={setSearch}
             />
+
           </div>
         </div>
 
-        <div className="card mb-4">
-          <div className="card-body">
-            <TaskForm />
-          </div>
-        </div>
-
-        <div className="row g-3">
+        <div className="row g-3 d-flex">
           {filteredTasks.length > 0 ? (
             filteredTasks.map((task) => (
               <div key={task.id} className="col-12">
                 <TaskCard
                   task={task}
+                  fetchTasks={fetchTasks}
                 />
               </div>
             ))
