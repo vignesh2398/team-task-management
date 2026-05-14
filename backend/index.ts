@@ -14,7 +14,11 @@ app.get('/health', (req: Request, res: Response) => {
 });
 
 app.use('/tasks', taskRoutes);
-
+console.log('Task routes registered');
+console.log('Task routes registered');
+console.log('Task routes registered');
+console.log('Task routes registered');
+console.log('Task routes registered');
 // 404 handler
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.status(404).json({ error: 'Route not found' });
